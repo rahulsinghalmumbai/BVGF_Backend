@@ -1,0 +1,6 @@
+@BVGF_HostAddress = http://localhost:5151
+
+GET {{BVGF_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
