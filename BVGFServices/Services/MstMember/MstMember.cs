@@ -81,5 +81,24 @@ namespace BVGFServices.Services.MstMember
             return result.ToString();
         }
 
+
+
+        public async Task<string> LoginByMob(string mob)
+        {
+            var parameter = new SqlParameter[]
+            {
+                new SqlParameter("@Mobile1",mob)
+            };
+            var dt = await _repositery.ExecuteStoredProcedureAsync("stp_loginMember", parameter);
+            if (dt.Rows.Count > 0)
+            {
+                return "Login Successfully";
+            }
+            else
+            {
+                return null;
+            }
+        }
+
     }
 }

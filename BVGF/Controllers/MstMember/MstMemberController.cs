@@ -83,5 +83,29 @@ namespace BVGF.Controllers.MstMember
                 return StatusCode(StatusCodes.Status500InternalServerError , $"Internal Server Error: {ex.Message}");
             }
         }
+
+        [HttpPost("Login")]
+        public async Task<ActionResult> LoginMember(string MobileNo)
+        {
+            string result = await _mstMemberService.LoginByMob(MobileNo);
+            if (result == null)
+            {
+                return Ok(new ResponseEntity
+                {
+                    Message = "Invalid",
+                    Status = "200",
+                    Data = MobileNo
+                });
+            }
+            else
+            {
+                return Ok(new ResponseEntity
+                {
+                    Message = "Login Successfully",
+                    Status = "200",
+                    Data = MobileNo
+                });
+            }
+        }
     }
 }

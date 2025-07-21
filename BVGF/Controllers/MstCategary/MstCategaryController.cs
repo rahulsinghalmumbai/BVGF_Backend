@@ -143,5 +143,38 @@ namespace BVGF.Controllers.MstCategary
         }
 
 
+        [HttpGet("DropDown")]
+        public async Task<ActionResult> GetDropDown()
+        {
+            try
+            {
+                var data = await _mstCategaryService.GetDropdownAsync();
+
+                if (data == null || data.Count == 0)
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "NO DropDown Data",
+                        Data = null
+                    });
+                }
+                else
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "Dropdown Data",
+                        Data = data
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error:{ex.Message}");
+            }
+        }
+
+
     }
 }
