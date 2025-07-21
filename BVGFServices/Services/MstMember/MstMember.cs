@@ -14,43 +14,59 @@ namespace BVGFServices.Services.MstMember
     public class MstMember: IMstMember
     {
         private readonly IMstCategary<MstMember> _repositery;
-
+       
         public MstMember(IMstCategary<MstMember> repositery)
         {
             _repositery = repositery;
+           
         }
 
-       
-        public async Task<List<MstMemberDto>> GetAllAsync()
+        public async Task<MemberListResultDto> GetAllAsync(FilterMemberDto filter)
         {
-            var result = new List<MstMemberDto>();
-
-            var dt = await _repositery.ExecuteStoredProcedureAsync("stp_GetAllMember");
-
-            foreach (DataRow row in dt.Rows)
+            var result = new MemberListResultDto
             {
-                result.Add(new MstMemberDto
-                {
-                    MemberID = row["MemberID"] != DBNull.Value ? Convert.ToInt32(row["MemberID"]): 0,
-                    Name = row["Name"]?.ToString(),
-                    Address= row["Address"]?.ToString(),
-                    City= row["City"]?.ToString(),
-                    Mobile1= row["Mobile1"]?.ToString(),
-                    Mobile2= row["Mobile2"]?.ToString(),
-                    Mobile3= row["Mobile3"]?.ToString(),
-                    Telephone= row["Telephone"]?.ToString(),
-                    Email1= row["Email1"]?.ToString(),
-                    Email2= row["Email2"]?.ToString(),
-                    Email3= row["Email3"]?.ToString(),
-                    Company= row["Company"]?.ToString(),
-                    CompAddress= row["CompAddress"]?.ToString(),
-                    CompCity= row["CompCity"]?.ToString(),
+                Members = new List<MstMemberDto>(),
+                TotalCount = 0
+            };
 
-                });
-                               
+            var parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Name", string.IsNullOrEmpty(filter.Name) ? DBNull.Value : (object)filter.Name),
+                new SqlParameter("@City", string.IsNullOrEmpty(filter.City) ? DBNull.Value : (object)filter.City),
+                new SqlParameter("@Company", string.IsNullOrEmpty(filter.Company) ? DBNull.Value : (object)filter.Company),
+                new SqlParameter("@Mobile", string.IsNullOrEmpty(filter.Mobile1) ? DBNull.Value : (object)filter.Mobile1)
+            };
+
+            var ds = await _repositery.ExecuteStoredProcedureAsync("stp_GetAllMember", parameters);
+
+            if (ds.Rows.Count > 0)
+            {
+                foreach (DataRow row in ds.Rows)
+                {
+                    result.Members.Add(new MstMemberDto
+                    {
+                        MemberID = row["MemberID"] != DBNull.Value ? Convert.ToInt32(row["MemberID"]) : 0,
+                        Name = row["Name"]?.ToString(),
+                        Address = row["Address"]?.ToString(),
+                        City = row["City"]?.ToString(),
+                        Mobile1 = row["Mobile1"]?.ToString(),
+                        Mobile2 = row["Mobile2"]?.ToString(),
+                        Mobile3 = row["Mobile3"]?.ToString(),
+                        Telephone = row["Telephone"]?.ToString(),
+                        Email1 = row["Email1"]?.ToString(),
+                        Email2 = row["Email2"]?.ToString(),
+                        Email3 = row["Email3"]?.ToString(),
+                        Company = row["Company"]?.ToString(),
+                        CompAddress = row["CompAddress"]?.ToString(),
+                        CompCity = row["CompCity"]?.ToString()
+                    });
+                }
+                result.TotalCount = Convert.ToInt32(ds.Rows[0]["TotalCount"]);
             }
+
             return result;
         }
+
 
         public async Task<string> CreateAsync(MstMemberDto member)
         {

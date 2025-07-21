@@ -29,4 +29,11 @@ namespace BVGFEntities.DTOs
 
         public DateTime? DOB { get; set; }
     }
+    public class FilterMemberDto
+    {
+        public string? Name { get; set; }
+        public string? Mobile1 { get; set; }
+        public string? City { get; set; }
+        public string? Company { get; set; }
+    }
 }

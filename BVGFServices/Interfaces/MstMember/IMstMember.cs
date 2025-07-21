@@ -9,7 +9,7 @@ namespace BVGFServices.Interfaces.MstMember
 {
     public interface IMstMember
     {
-        Task<List<MstMemberDto>> GetAllAsync();
+        Task<MemberListResultDto> GetAllAsync(FilterMemberDto filter);
 
         Task<string> CreateAsync(MstMemberDto member);
 
