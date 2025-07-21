@@ -122,6 +122,26 @@ namespace BVGFServices.Services.MstCategary
          
         }
 
+        public async Task<List<CategoryDropDownDto>> GetDropdownAsync()
+        {
+            var result = new List<CategoryDropDownDto>();
+
+            var dt = await _repository.ExecuteStoredProcedureAsync("stp_categoryDropDown");
+            foreach (DataRow row in dt.Rows)
+            {
+                result.Add(new CategoryDropDownDto
+                {
+                    CategoryID = row["CategoryID"] != DBNull.Value ? Convert.ToInt32(row["CategoryID"]) : 0,
+                    CategoryName = row["CategoryName"]?.ToString()
+
+                });
+            }
+
+            return result;
+
+
+        }
+
 
     }
 }

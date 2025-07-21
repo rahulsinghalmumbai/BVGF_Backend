@@ -12,5 +12,7 @@ namespace BVGFServices.Interfaces.MstMember
         Task<List<MstMemberDto>> GetAllAsync();
 
         Task<string> CreateAsync(MstMemberDto member);
+
+        Task<string> LoginByMob(string mob);
     }
 }
