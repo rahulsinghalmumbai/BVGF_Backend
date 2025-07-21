@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BVGFEntities.DTOs
+namespace BVGFEntities.DTOs     
 {
     public class BaseEntityDto
     {
