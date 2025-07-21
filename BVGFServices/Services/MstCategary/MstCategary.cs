@@ -52,11 +52,11 @@ namespace BVGFServices.Services.MstCategary
             new SqlParameter("@Status", cate.Status),
             new SqlParameter("@CreatedBy", cate.CreatedBy),
             new SqlParameter("@UpdatedBy",cate.UpdatedBy)
-             
+
          };
 
             var result = await _repository.ExecuteNonQueryStoredProcedureAsync("stp_InsertCategory", parameters);
-            return result.ToString() ;
+            return result.ToString();
         }
 
 
@@ -66,7 +66,7 @@ namespace BVGFServices.Services.MstCategary
             {
                 new SqlParameter("@CategoryID",ID)
             };
-            
+
 
             var dt = await _repository.ExecuteStoredProcedureAsync("stp_GetCategoryById", parameter);
             if (dt.Rows.Count > 0)
@@ -99,11 +99,11 @@ namespace BVGFServices.Services.MstCategary
             new SqlParameter("@CategoryID", ID)
 
             };
-            if(ID>0 && ID!=null)
+            if (ID > 0 && ID != null)
             {
 
                 var getData = await _repository.ExecuteStoredProcedureAsync("stp_GetCategoryById", parameters);
-                if(getData.Rows.Count>0)
+                if (getData.Rows.Count > 0)
                 {
                     var parameters1 = new SqlParameter[]
                     {
@@ -119,9 +119,27 @@ namespace BVGFServices.Services.MstCategary
                 }
             }
             return 0;
-         
+
         }
 
+        public async Task<List<CategoryDropDownDto>> GetDropdownAsync()
+        {
+            var result = new List<CategoryDropDownDto>();
 
+            var dt = await _repository.ExecuteStoredProcedureAsync("stp_categoryDropDown");
+            foreach (DataRow row in dt.Rows)
+            {
+                result.Add(new CategoryDropDownDto
+                {
+                    CategoryID = row["CategoryID"] != DBNull.Value ? Convert.ToInt32(row["CategoryID"]) : 0,
+                    CategoryName = row["CategoryName"]?.ToString()
+
+                });
+            }
+                
+            return result;
+
+
+        }
     }
 }

@@ -84,7 +84,7 @@ namespace BVGF.Controllers.MstMember
             }
         }
 
-        [HttpPost("LoginMember")]
+        [HttpPost("Login")]
         public async  Task<ActionResult> LoginMember(string MobileNo)
         {
             string result = await _mstMemberService.LoginByMob(MobileNo);
@@ -92,7 +92,7 @@ namespace BVGF.Controllers.MstMember
             {
                 return Ok(new ResponseEntity
                 {
-                    Message = "Mobile Number Not Match",
+                    Message = "Invalid",
                     Status = "200",
                     Data = MobileNo
                 });

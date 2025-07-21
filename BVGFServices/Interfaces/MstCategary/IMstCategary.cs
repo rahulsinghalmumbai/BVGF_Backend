@@ -18,5 +18,7 @@ namespace BVGFServices.Interfaces.MstCategary
 
         Task<long> DeleteByID(long ID);
 
+        Task<List<CategoryDropDownDto>> GetDropdownAsync();
+
     }
 }
