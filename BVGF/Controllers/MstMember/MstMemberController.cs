@@ -18,12 +18,12 @@ namespace BVGF.Controllers.MstMember
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllMember()
+        public async Task<ActionResult> GetAllMember([FromQuery] FilterMemberDto filter)
         {
             try
             {
-                var Members = await _mstMemberService.GetAllAsync();
-                if (Members == null || Members.Count == 0)
+                var Members = await _mstMemberService.GetAllAsync(filter);
+                if (Members == null || Members.TotalCount == 0)
                 {
                     return NotFound(new ResponseEntity
                     {
