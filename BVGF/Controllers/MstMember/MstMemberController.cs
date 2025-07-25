@@ -46,7 +46,7 @@ namespace BVGF.Controllers.MstMember
 
         }
 
-        [HttpPost("Upsert")]
+        [HttpPost("UpsertMember")]
         public async Task<IActionResult> CreateMember(MstMemberDto member)
         {
             try
@@ -84,27 +84,34 @@ namespace BVGF.Controllers.MstMember
             }
         }
 
-        [HttpPost("Login")]
-        public async Task<ActionResult> LoginMember(string MobileNo)
+        [HttpGet("login")]
+        public async Task<ActionResult> LoginMember([FromQuery] string MobileNo)
         {
-            string result = await _mstMemberService.LoginByMob(MobileNo);
-            if (result == null)
+            try
             {
-                return Ok(new ResponseEntity
+                string result = await _mstMemberService.LoginByMob(MobileNo);
+                if (result == null)
                 {
-                    Message = "Invalid",
-                    Status = "200",
-                    Data = MobileNo
-                });
+                    return NotFound(new ResponseEntity
+                    {
+                        Message = "Something went wrong..",
+                        Status = "400",
+                        Data = result
+                    });
+                }
+                else
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Message = "Login Successfully",
+                        Status = "200",
+                        Data = result
+                    });
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return Ok(new ResponseEntity
-                {
-                    Message = "Login Successfully",
-                    Status = "200",
-                    Data = MobileNo
-                });
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
             }
         }
     }

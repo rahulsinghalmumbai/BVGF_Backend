@@ -29,6 +29,14 @@ namespace BVGF
             builder.Services.AddScoped<IMstMember, MstMember>();
             //register our automapper
             builder.Services.AddAutoMapper(typeof(Automapperr));
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder => builder.AllowAnyOrigin()
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader());
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -40,7 +48,9 @@ namespace BVGF
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthorization(); 
+            app.UseCors("AllowAll");
+
 
 
             app.MapControllers();
