@@ -37,6 +37,6 @@ namespace BVGFEntities.DTOs
         public string? Mobile1 { get; set; }
         public string? City { get; set; }
         public string? Company { get; set; }
-        public string? CatName { get; set; }
+        public long? CatName { get; set; }
     }
 }
