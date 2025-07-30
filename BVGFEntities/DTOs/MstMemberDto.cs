@@ -28,6 +28,8 @@ namespace BVGFEntities.DTOs
         public string? CompCity { get; set; }
 
         public DateTime? DOB { get; set; }
+
+        public string? CategoryName { get; set; }
     }
     public class FilterMemberDto
     {
@@ -35,5 +37,6 @@ namespace BVGFEntities.DTOs
         public string? Mobile1 { get; set; }
         public string? City { get; set; }
         public string? Company { get; set; }
+        public string? CatName { get; set; }
     }
 }
