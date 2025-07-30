@@ -10,5 +10,6 @@ namespace BVGFEntities.DTOs
     {
         public List<MstMemberDto> Members { get; set; } = new();
         public int? TotalCount { get; set; }
+        
     }
 }

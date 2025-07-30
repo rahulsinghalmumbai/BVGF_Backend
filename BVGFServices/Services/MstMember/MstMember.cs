@@ -34,7 +34,8 @@ namespace BVGFServices.Services.MstMember
                 new SqlParameter("@Name", string.IsNullOrEmpty(filter.Name) ? DBNull.Value : (object)filter.Name),
                 new SqlParameter("@City", string.IsNullOrEmpty(filter.City) ? DBNull.Value : (object)filter.City),
                 new SqlParameter("@Company", string.IsNullOrEmpty(filter.Company) ? DBNull.Value : (object)filter.Company),
-                new SqlParameter("@Mobile", string.IsNullOrEmpty(filter.Mobile1) ? DBNull.Value : (object)filter.Mobile1)
+                new SqlParameter("@Mobile", string.IsNullOrEmpty(filter.Mobile1) ? DBNull.Value : (object)filter.Mobile1),
+                new SqlParameter("@CategoryName", string.IsNullOrEmpty(filter.CatName) ? DBNull.Value : (object)filter.CatName)
             };
 
             var ds = await _repositery.ExecuteStoredProcedureAsync("stp_GetAllMember", parameters);
@@ -58,7 +59,8 @@ namespace BVGFServices.Services.MstMember
                         Email3 = row["Email3"]?.ToString(),
                         Company = row["Company"]?.ToString(),
                         CompAddress = row["CompAddress"]?.ToString(),
-                        CompCity = row["CompCity"]?.ToString()
+                        CompCity = row["CompCity"]?.ToString(),
+                        CategoryName = row["CategoryName"]?.ToString()
                     });
                 }
                 result.TotalCount = Convert.ToInt32(ds.Rows[0]["TotalCount"]);
