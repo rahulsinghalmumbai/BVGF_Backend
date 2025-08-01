@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BVGFEntities.DTOs;
+using BVGFEntities.Entities;
 
 namespace BVGFServices.Interfaces.MstMember
 {
@@ -11,7 +12,7 @@ namespace BVGFServices.Interfaces.MstMember
     {
         Task<MemberListResultDto> GetAllAsync(FilterMemberDto filter);
 
-        Task<string> CreateAsync(MstMemberDto member);
+        Task<ResponseEntity> CreateAsync(MstMemberDto member);
 
         Task<string> LoginByMob(string mob);
     }

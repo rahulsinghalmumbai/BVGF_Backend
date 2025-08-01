@@ -1,13 +1,14 @@
-﻿using System;
+﻿using BVGFEntities.DTOs;
+using BVGFEntities.Entities;
+using BVGFRepository.Interfaces.MstCategary;
+using BVGFServices.Interfaces.MstMember;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BVGFEntities.DTOs;
-using BVGFRepository.Interfaces.MstCategary;
-using BVGFServices.Interfaces.MstMember;
-using Microsoft.Data.SqlClient;
 
 namespace BVGFServices.Services.MstMember
 {
@@ -70,10 +71,13 @@ namespace BVGFServices.Services.MstMember
         }
 
 
-        public async Task<string> CreateAsync(MstMemberDto member)
+        public async Task<ResponseEntity> CreateAsync(MstMemberDto member)
         {
-            var parameters = new SqlParameter[]
+            ResponseEntity respons = new ResponseEntity();
+            try
             {
+                var parameters = new SqlParameter[]
+           {
                 new SqlParameter("@MemberID", member.MemberID),
                 new SqlParameter("@Name", member.Name),
                 new SqlParameter("@Address", member.Address),
@@ -91,12 +95,40 @@ namespace BVGFServices.Services.MstMember
                 new SqlParameter("@Status", member.Status),
                 new SqlParameter("@CreatedBy", member.CreatedBy),
                 new SqlParameter("@UpdatedBy", member.UpdatedBy),
-                new SqlParameter("@DOB", member.DOB)
-                
-            };
+                new SqlParameter("@DOB", member.DOB),
+                //new SqlParameter(""
 
-            var result = await _repositery.ExecuteNonQueryStoredProcedureAsync("stp_InsertMember",parameters);
-            return result.ToString();
+           };
+
+                var result = await _repositery.ExecuteNonQueryStoredProcedureAsync("stp_InsertMember", parameters);
+                if(result !=null)
+                {
+                    if(member.MemberID>0)
+                    {
+                        respons.Status = "Success";
+                        respons.Message = "Membber updated successfully..";
+                        respons.Data = member;
+                    }
+                    else
+                    {
+                        respons.Status = "Success";
+                        respons.Message = "Membber created successfully..";
+                        respons.Data = member;
+                    }
+
+                }
+                else
+                {
+                    respons.Status = "Failed";
+                    respons.Message = "Something went wrong..";
+                    respons.Data = null;
+                }
+            }catch(Exception ex)
+            {
+                return null;
+            }
+            return respons;
+           
         }
 
 

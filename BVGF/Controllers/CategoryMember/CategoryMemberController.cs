@@ -20,9 +20,15 @@ namespace BVGF.Controllers.CategoryMember
         [HttpPost("UpsertCatMember")]
         public async Task<IActionResult> CreateCategoryMember([FromBody] CategoryMemberDto dto)
         {
-           
+            try
+            {
                 var result = await _categoryMember.CreateAsync(dto);
                 return Ok(result);
+            }catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+            }
+                
                
         }
     }
