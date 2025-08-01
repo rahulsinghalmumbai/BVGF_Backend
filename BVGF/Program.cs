@@ -4,9 +4,11 @@ using BVGFRepository.Repository.MstCategary;
 using BVGFServices.Interfaces.CategoryMember;
 using BVGFServices.Interfaces.MstCategary;
 using BVGFServices.Interfaces.MstMember;
+using BVGFServices.Interfaces.MstMember_Edit;
 using BVGFServices.Services.CategoryMember;
 using BVGFServices.Services.MstCategary;
 using BVGFServices.Services.MstMember;
+using BVGFServices.Services.MstMember_Edit;
 
 namespace BVGF
 {
@@ -31,6 +33,8 @@ namespace BVGF
             builder.Services.AddScoped<IMstMember, MstMember>();
 
             builder.Services.AddScoped<ICategoryMember, CategoryMember>();
+
+            builder.Services.AddScoped<IMstMember_Edit, MstMember_Edit>();
             //register our automapper
             builder.Services.AddAutoMapper(typeof(Automapperr));
             builder.Services.AddCors(options =>
