@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using BVGF.Entities;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,6 +13,7 @@ namespace BVGFRepository.Interfaces.MstCategary
     {
         Task<DataTable> ExecuteStoredProcedureAsync(string spName, SqlParameter[] parameters = null);
         Task<int> ExecuteNonQueryStoredProcedureAsync(string spName, SqlParameter[] parameters);
-       
+        Task<MstMember> ExecuteStoredProcedureWithResultAsync(string spName, SqlParameter[] parameters);
+
     }
 }

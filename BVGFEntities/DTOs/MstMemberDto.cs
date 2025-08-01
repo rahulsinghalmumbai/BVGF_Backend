@@ -28,7 +28,7 @@ namespace BVGFEntities.DTOs
         public string? CompCity { get; set; }
 
         public DateTime? DOB { get; set; }
-
+        public bool? IsEdit { get; set; }=false;
         public string? CategoryName { get; set; }
     }
     public class FilterMemberDto
