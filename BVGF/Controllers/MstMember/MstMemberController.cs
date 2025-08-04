@@ -23,21 +23,7 @@ namespace BVGF.Controllers.MstMember
             try
             {
                 var Members = await _mstMemberService.GetAllAsync(filter);
-                if (Members == null || Members.TotalCount == 0)
-                {
-                    return NotFound(new ResponseEntity
-                    {
-                        Status = "400",
-                        Message = "Record Not Found",
-                        Data = Members
-                    });
-                }
-                return Ok(new ResponseEntity
-                {
-                    Status = "200",
-                    Message = "All Member Found",
-                    Data = Members
-                });
+               return Ok(Members);
             }
             catch (Exception ex)
             {
@@ -53,29 +39,16 @@ namespace BVGF.Controllers.MstMember
             {
                 if (member == null || String.IsNullOrWhiteSpace(member.Name))
                 {
-                    return BadRequest(new ResponseEntity { Status = "400", Message = "Bad Request", Data = null });
+                    return BadRequest(member);
                 }
 
                 var data = await _mstMemberService.CreateAsync(member);
+                if (data.Status == "Failed" || data.Status == "Error")
+                {
+                    return BadRequest(data);
+                }
 
-                if (member.MemberID == 0 || member.MemberID==null) 
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Status = "200",
-                        Message = "Create Member Successfully",
-                        Data = data
-                    });
-                }
-                else
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Status = "200",
-                        Message = "Update Member Successfully",
-                        Data = data
-                    });
-                }
+                return Ok(data);
 
             }
             catch (Exception ex)
@@ -89,25 +62,8 @@ namespace BVGF.Controllers.MstMember
         {
             try
             {
-                string result = await _mstMemberService.LoginByMob(MobileNo);
-                if (result == null)
-                {
-                    return NotFound(new ResponseEntity
-                    {
-                        Message = "Something went wrong..",
-                        Status = "400",
-                        Data = result
-                    });
-                }
-                else
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Message = "Login Successfully",
-                        Status = "200",
-                        Data = result
-                    });
-                }
+                var result = await _mstMemberService.LoginByMob(MobileNo);
+                return Ok(result);
             }
             catch (Exception ex)
             {

@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 using BVGFEntities.DTOs;
 using BVGFEntities.Entities;
 
-namespace BVGFServices.Interfaces.MstMember
+namespace BVGFServices.Interfaces.MstMember_Edit
 {
-    public interface IMstMember
+    public interface IMstMember_Edit
     {
-        Task<ResponseEntity> GetAllAsync(FilterMemberDto filter);
-
         Task<ResponseEntity> CreateAsync(MstMemberDto member);
-
-        Task<ResponseEntity> LoginByMob(string mob);
     }
 }

@@ -23,21 +23,9 @@ namespace BVGF.Controllers.MstCategary
             try
             {
                 var categories = await _mstCategaryService.GetAllAsync();
-
-                if (categories == null || categories.Count == 0)
-                    return NotFound(new ResponseEntity
-                    {
-                        Status = "404",
-                        Message = "No categories found",
-                        Data = null
-                    });
-
-                return Ok(new ResponseEntity
-                {
-                    Status = "200",
-                    Message = "Categaries Founds",
-                    Data = categories
-                });
+                
+                return Ok(categories);
+                
             }
             catch (Exception ex)
             {
@@ -50,19 +38,8 @@ namespace BVGF.Controllers.MstCategary
         {
             try
             {
-                if (dto == null || string.IsNullOrWhiteSpace(dto.CategoryName))
-                    return BadRequest(new ResponseEntity { Status = "400", Message = "Bad Request", Data = null });
-
                 var result = await _mstCategaryService.CreateAsync(dto);
-
-                if (dto.CategoryID == 0 || dto.CategoryID == null)
-                {
-                    return Ok(new ResponseEntity { Status = "200", Message = "Category created successfully", Data = result });
-                }
-                else
-                {
-                    return Ok(new ResponseEntity { Status = "200", Message = "Category Updated successfully", Data = result });
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -77,23 +54,8 @@ namespace BVGF.Controllers.MstCategary
             try
             {
                 var category = await _mstCategaryService.GetByID(CategoryID);
-
-                if (category == null)
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Status = "200",
-                        Message = "No category found",
-                        Data = category
-                    });
-                }
-
-                return Ok(new ResponseEntity
-                {
-                    Status = "200",
-                    Message = "Category found",
-                    Data = category
-                });
+                return Ok(category);
+               
             }
             catch (Exception ex)
             {
@@ -108,30 +70,13 @@ namespace BVGF.Controllers.MstCategary
 
 
         [HttpDelete("CategoryID")]
-        public async Task<ActionResult> DeleteCategoryByID(long CategoryID)
+        public async Task<IActionResult> DeleteCategoryByID([FromBody] CategoryDeleteDto dto)
         {
             try
             {
-                var category = await _mstCategaryService.DeleteByID(CategoryID);
+                var category = await _mstCategaryService.DeleteByID(dto);
 
-               if(category>0)
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Status = "200",
-                        Message = "category Delete",
-                        Data = category
-                    });
-                }
-                else
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Status = "200",
-                        Message = "Category not found or already deleted",
-                        Data = category
-                    });
-                }
+                return Ok(category);
                
             }
             catch (Exception ex)
@@ -150,24 +95,7 @@ namespace BVGF.Controllers.MstCategary
             {
                 var data = await _mstCategaryService.GetDropdownAsync();
 
-                if (data == null || data.Count == 0)
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Status = "200",
-                        Message = "NO DropDown Data",
-                        Data = null
-                    });
-                }
-                else
-                {
-                    return Ok(new ResponseEntity
-                    {
-                        Status = "200",
-                        Message = "Dropdown Data",
-                        Data = data
-                    });
-                }
+                return Ok(data);
             }
             catch (Exception ex)
             {
