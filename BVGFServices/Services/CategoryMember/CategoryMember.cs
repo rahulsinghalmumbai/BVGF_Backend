@@ -40,20 +40,20 @@ namespace BVGFServices.Services.CategoryMember
                     {
                         response.Status = "Success";
                         response.Message = "Categary  member updated succcessfully";
-                        response.Data = result;
+                        response.Data = categoryMemberDto;
                     }
                     else
                     {
                         response.Status = "Success";
                         response.Message = "Categary  member created succcessfully";
-                        response.Data = result;
+                        response.Data = categoryMemberDto;
                     }
                 }
                  else
                  {
                         response.Status = "Fail";
                         response.Message = "Something went wrong...";
-                        response.Data = result;
+                        response.Data = null;
                  }
               
                

@@ -10,10 +10,10 @@ namespace BVGFServices.Interfaces.MstMember
 {
     public interface IMstMember
     {
-        Task<MemberListResultDto> GetAllAsync(FilterMemberDto filter);
+        Task<ResponseEntity> GetAllAsync(FilterMemberDto filter);
 
         Task<ResponseEntity> CreateAsync(MstMemberDto member);
 
-        Task<string> LoginByMob(string mob);
+        Task<ResponseEntity> LoginByMob(string mob);
     }
 }

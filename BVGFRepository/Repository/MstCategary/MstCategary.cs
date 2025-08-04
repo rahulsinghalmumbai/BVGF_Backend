@@ -27,41 +27,69 @@ namespace BVGFRepository.Repository.MstCategary
         {
             var dt = new DataTable();
 
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(spName, conn))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
-
-                if (parameters != null)
-                    cmd.Parameters.AddRange(parameters);
-
-                await conn.OpenAsync();
-                using (var reader = await cmd.ExecuteReaderAsync())
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                using (SqlCommand cmd = new SqlCommand(spName, conn))
                 {
-                    dt.Load(reader);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    if (parameters != null)
+                        cmd.Parameters.AddRange(parameters);
+
+                    await conn.OpenAsync();
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        dt.Load(reader);
+                    }
                 }
+            }
+            catch (SqlException sqlEx)
+            {
+                throw; 
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
 
             return dt;
         }
+
         public async Task<int> ExecuteNonQueryStoredProcedureAsync(string spName, SqlParameter[] parameters)
         {
             int rowsAffected = 0;
 
-            using (SqlConnection conn = new SqlConnection(_connectionString))
-            using (SqlCommand cmd = new SqlCommand(spName, conn))
+            try
             {
-                cmd.CommandType = CommandType.StoredProcedure;
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                using (SqlCommand cmd = new SqlCommand(spName, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
 
-                if (parameters != null)
-                    cmd.Parameters.AddRange(parameters);
+                    if (parameters != null)
+                        cmd.Parameters.AddRange(parameters);
 
-                await conn.OpenAsync();
-                rowsAffected = await cmd.ExecuteNonQueryAsync();
+                    await conn.OpenAsync();
+                    rowsAffected = await cmd.ExecuteNonQueryAsync();
+                }
+            }
+            catch (SqlException ex)
+            {
+                
+                Console.WriteLine($"SQL Exception: {ex.Message}");
+                throw; 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Exception: {ex.Message}");
+                throw; 
             }
 
             return rowsAffected;
         }
+
 
         //public async Task<MstMember> ExecuteStoredProcedureWithResultAsync(string spName, SqlParameter[] parameters)
         //{
