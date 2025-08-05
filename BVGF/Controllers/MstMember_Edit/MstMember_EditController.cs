@@ -16,13 +16,66 @@ namespace BVGF.Controllers.MstMember_Edit
             _mstMember_EditServicse = mstMember_EditServicse;
         }
 
-        [HttpPost]
+        [HttpPost("UpsertMember_Edit")]
         public async Task<IActionResult> Create(MstMemberDto mstMemberDto)
         {
             try
             {
                 var respons = await _mstMember_EditServicse.CreateAsync(mstMemberDto);
                 return Ok(respons);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+            }
+        }
+        //when user clicked edit button
+        [HttpGet("GetMember_EditByMemId")]
+        public async Task<IActionResult> GetMember_EditByMemId(long MemberId)
+        {
+            try
+            {
+                var response= await _mstMember_EditServicse.GetMember_EditByMemId(MemberId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+            }
+        }
+        [HttpGet("GetEditedMemberChangesByMemId")]
+        public async Task<IActionResult> GetEditedMemberChanges(long MemberId)
+        {
+            try
+            {
+                var response = await _mstMember_EditServicse.GetEditedMemberChanges(MemberId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+            }
+        }
+        [HttpGet("GetAllEditedMembers")]
+        public async Task<IActionResult> GetAllEditedMembers()
+        {
+            try
+            {
+                var response = await _mstMember_EditServicse.GetAllEditedMembers();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+            }
+        }
+        [HttpGet("ApprovedByAdminOfMemberRecords")]
+        public async Task<IActionResult> ApprovedByAdminOfMemberRecords(long MeemberId, long UpdatedBy)
+        {
+            try
+            {
+                var response = await _mstMember_EditServicse.ApprovedByAdminOfMemberRecords(MeemberId, UpdatedBy);
+                return Ok(response);
             }
             catch (Exception ex)
             {

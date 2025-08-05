@@ -64,7 +64,9 @@ namespace BVGFServices.Services.MstMember
                             Company = row["Company"]?.ToString(),
                             CompAddress = row["CompAddress"]?.ToString(),
                             CompCity = row["CompCity"]?.ToString(),
-                            CategoryName = row["CategoryName"]?.ToString()
+                            CategoryName = row["CategoryName"]?.ToString(),
+                            DOB = row["DOB"] != DBNull.Value ? Convert.ToDateTime(row["DOB"]) : (DateTime?)null,
+                            IsEdit = row["IsEdit"] != DBNull.Value && Convert.ToBoolean(row["IsEdit"]),
                         });
                     }
                     result.TotalCount = Convert.ToInt32(ds.Rows[0]["TotalCount"]);
@@ -154,9 +156,6 @@ namespace BVGFServices.Services.MstMember
 
             return response;
         }
-
-
-
 
         public async Task<ResponseEntity> LoginByMob(string mob)
         {

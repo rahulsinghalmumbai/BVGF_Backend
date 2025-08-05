@@ -1,6 +1,13 @@
-﻿namespace BVGF.Entities
+﻿using BVGF.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BVGFEntities.Entities
 {
-    public class MstMember: BaseEntity
+    public class MstMember_Edit:BaseEntity
     {
         public long MemberID { get; set; }
         public string Name { get; set; }
@@ -19,6 +26,6 @@
         public string? CompAddress { get; set; }
         public string? CompCity { get; set; }
         public DateTime? DOB { get; set; }
-        public bool? IsEdit { get; set; } = false;   
+       
     }
 }

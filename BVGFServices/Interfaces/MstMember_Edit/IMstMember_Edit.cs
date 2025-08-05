@@ -11,5 +11,9 @@ namespace BVGFServices.Interfaces.MstMember_Edit
     public interface IMstMember_Edit
     {
         Task<ResponseEntity> CreateAsync(MstMemberDto member);
+        Task<ResponseEntity> GetMember_EditByMemId(long MemberId);
+        Task<ResponseEntity> GetEditedMemberChanges(long MemberId);
+        Task<ResponseEntity> GetAllEditedMembers();
+        Task<ResponseEntity> ApprovedByAdminOfMemberRecords(long MeemberId, long UpdatedBy);
     }
 }
