@@ -35,11 +35,11 @@ namespace BVGFServices.Services.MstMember
 
                 var parameters = new SqlParameter[]
                 {
-                new SqlParameter("@Name", string.IsNullOrEmpty(filter.Name) ? DBNull.Value : (object)filter.Name),
-                new SqlParameter("@City", string.IsNullOrEmpty(filter.City) ? DBNull.Value : (object)filter.City),
-                new SqlParameter("@Company", string.IsNullOrEmpty(filter.Company) ? DBNull.Value : (object)filter.Company),
-                new SqlParameter("@Mobile", string.IsNullOrEmpty(filter.Mobile1) ? DBNull.Value : (object)filter.Mobile1),
-                   new SqlParameter("@CatId", !filter.CatName.HasValue || filter.CatName == 0 ? DBNull.Value : (object)filter.CatName)
+                    new SqlParameter("@Name", string.IsNullOrEmpty(filter.Name) ? DBNull.Value : (object)filter.Name),
+                    new SqlParameter("@City", string.IsNullOrEmpty(filter.City) ? DBNull.Value : (object)filter.City),
+                    new SqlParameter("@Company", string.IsNullOrEmpty(filter.Company) ? DBNull.Value : (object)filter.Company),
+                    new SqlParameter("@Mobile", string.IsNullOrEmpty(filter.Mobile1) ? DBNull.Value : (object)filter.Mobile1),
+                    new SqlParameter("@CatId", !filter.CatName.HasValue || filter.CatName == 0 ? DBNull.Value : (object)filter.CatName)
                 };
 
                 var ds = await _repositery.ExecuteStoredProcedureAsync("stp_GetAllMember", parameters);
@@ -102,24 +102,24 @@ namespace BVGFServices.Services.MstMember
             {
                 var parameters = new SqlParameter[]
                 {
-            new SqlParameter("@MemberID", member.MemberID),
-            new SqlParameter("@Name", member.Name),
-            new SqlParameter("@Address", member.Address),
-            new SqlParameter("@City", member.City),
-            new SqlParameter("@Mobile1", member.Mobile1),
-            new SqlParameter("@Mobile2", member.Mobile2),
-            new SqlParameter("@Mobile3", member.Mobile3),
-            new SqlParameter("@Telephone", member.Telephone),
-            new SqlParameter("@Email1", member.Email1),
-            new SqlParameter("@Email2", member.Email2),
-            new SqlParameter("@Email3", member.Email3),
-            new SqlParameter("@Company", member.Company),
-            new SqlParameter("@CompAddress", member.CompAddress),
-            new SqlParameter("@CompCity", member.CompCity),
-            new SqlParameter("@Status", member.Status),
-            new SqlParameter("@CreatedBy", member.CreatedBy),
-            new SqlParameter("@UpdatedBy", member.UpdatedBy),
-            new SqlParameter("@DOB", member.DOB),
+                    new SqlParameter("@MemberID", member.MemberID),
+                    new SqlParameter("@Name", member.Name),
+                    new SqlParameter("@Address", member.Address),
+                    new SqlParameter("@City", member.City),
+                    new SqlParameter("@Mobile1", member.Mobile1),
+                    new SqlParameter("@Mobile2", member.Mobile2),
+                    new SqlParameter("@Mobile3", member.Mobile3),
+                    new SqlParameter("@Telephone", member.Telephone),
+                    new SqlParameter("@Email1", member.Email1),
+                    new SqlParameter("@Email2", member.Email2),
+                    new SqlParameter("@Email3", member.Email3),
+                    new SqlParameter("@Company", member.Company),
+                    new SqlParameter("@CompAddress", member.CompAddress),
+                    new SqlParameter("@CompCity", member.CompCity),
+                    new SqlParameter("@Status", member.Status),
+                    new SqlParameter("@CreatedBy", member.CreatedBy),
+                    new SqlParameter("@UpdatedBy", member.UpdatedBy),
+                    new SqlParameter("@DOB", member.DOB),
                 };
 
                 int result = await _repositery.ExecuteNonQueryStoredProcedureAsync("stp_InsertMember", parameters);
