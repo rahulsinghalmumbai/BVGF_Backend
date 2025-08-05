@@ -168,8 +168,8 @@ namespace BVGFServices.Services.MstCategary
             {
                 var parameters = new SqlParameter[]
                 {
-            new SqlParameter("@CategoryID", deleteDto.CategoryID),
-            new SqlParameter("@DeletedBy", deleteDto.DeletedBy)
+                    new SqlParameter("@CategoryID", deleteDto.CategoryID),
+                    new SqlParameter("@DeletedBy", deleteDto.DeletedBy)
                 };
 
 

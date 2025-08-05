@@ -69,7 +69,7 @@ namespace BVGF.Controllers.MstCategary
         }
 
 
-        [HttpDelete("CategoryID")]
+        [HttpPost("CategoryID")]
         public async Task<IActionResult> DeleteCategoryByID([FromBody] CategoryDeleteDto dto)
         {
             try
