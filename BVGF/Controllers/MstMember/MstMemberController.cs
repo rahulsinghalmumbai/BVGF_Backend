@@ -18,7 +18,7 @@ namespace BVGF.Controllers.MstMember
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetAllMember([FromQuery] FilterMemberDto filter)
+        public async Task<IActionResult> GetAllMember([FromQuery] FilterMemberDto filter)
         {
             try
             {
@@ -31,7 +31,20 @@ namespace BVGF.Controllers.MstMember
             }
 
         }
-
+        [HttpGet("MemberById")]
+        public async Task<IActionResult> GetMemberByIdAsync(long MemberId)
+        {
+            try
+            {
+                var result = await _mstMemberService.GetMemberByIdAsync(MemberId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+            }
+        }
+            
         [HttpPost("UpsertMember")]
         public async Task<IActionResult> CreateMember(MstMemberDto member)
         {

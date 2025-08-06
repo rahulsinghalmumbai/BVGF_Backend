@@ -42,20 +42,26 @@ namespace BVGFServices.Services.MstMember_Edit
                 new SqlParameter("@Company", member.Company),
                 new SqlParameter("@CompAddress", member.CompAddress),
                 new SqlParameter("@CompCity", member.CompCity),
-                new SqlParameter("@Status", member.Status),
+                //new SqlParameter("@Status", member.Status),
                 new SqlParameter("@CreatedBy", member.CreatedBy),
                 new SqlParameter("@UpdatedBy", member.UpdatedBy),
                 new SqlParameter("@DOB", member.DOB)
 
               };
                 var result = await _repository.ExecuteNonQueryStoredProcedureAsync("stp_Upsert_MstMemberEdit", parameters);
-                if(result != null)
+                if(result != null && result>0 || result == 1)
                 {
 
                     response.Status = "Success";
                     response.Message = "Member Updated Successfully";
                     response.Data = member;
                     
+                }
+                else if(result == -1)
+                {
+                    response.Status = "Failed";
+                    response.Message = "Member is Updated Something went wrong..";
+                    response.Data = null;
                 }
                 else
                 {
@@ -80,55 +86,63 @@ namespace BVGFServices.Services.MstMember_Edit
             try
             {
                 var parameters = new SqlParameter[]
-                { new SqlParameter("@MemberID",MemberId)};
+                {
+                 new SqlParameter("@MemberID", MemberId)
+                };
+
                 var result = await _repository.ExecuteStoredProcedureAsync("stp_GetMemberEditDataByMemberID", parameters);
 
-                var memberEditList = new List<MstMember_EditDto>();
-                if (result.Rows.Count>0)
+                if (result.Rows.Count > 0)
                 {
-                    foreach (DataRow row in result.Rows)
+                    var row = result.Rows[0]; 
+
+                    var member = new MstMember_EditDto
                     {
-                        memberEditList.Add(new MstMember_EditDto
-                        {
-                            MemberID = row["MemberID"] != DBNull.Value ? Convert.ToInt32(row["MemberID"]) : 0,
-                            Name = row["Name"]?.ToString(),
-                            Address = row["Address"]?.ToString(),
-                            City = row["City"]?.ToString(),
-                            Mobile1 = row["Mobile1"]?.ToString(),
-                            Mobile2 = row["Mobile2"]?.ToString(),
-                            Mobile3 = row["Mobile3"]?.ToString(),
-                            Telephone = row["Telephone"]?.ToString(),
-                            Email1 = row["Email1"]?.ToString(),
-                            Email2 = row["Email2"]?.ToString(),
-                            Email3 = row["Email3"]?.ToString(),
-                            Company = row["Company"]?.ToString(),
-                            CompAddress = row["CompAddress"]?.ToString(),
-                            CompCity = row["CompCity"]?.ToString(),
-                            DOB = row["DOB"] != DBNull.Value ? Convert.ToDateTime(row["DOB"]) : (DateTime?)null,
-                            
-                        });
-                    }
+                        MemberID = row["MemberID"] != DBNull.Value ? Convert.ToInt32(row["MemberID"]) : 0,
+                        Name = row["Name"]?.ToString(),
+                        Address = row["Address"]?.ToString(),
+                        City = row["City"]?.ToString(),
+                        Mobile1 = row["Mobile1"]?.ToString(),
+                        Mobile2 = row["Mobile2"]?.ToString(),
+                        Mobile3 = row["Mobile3"]?.ToString(),
+                        Telephone = row["Telephone"]?.ToString(),
+                        Email1 = row["Email1"]?.ToString(),
+                        Email2 = row["Email2"]?.ToString(),
+                        Email3 = row["Email3"]?.ToString(),
+                        Company = row["Company"]?.ToString(),
+                        CompAddress = row["CompAddress"]?.ToString(),
+                        CompCity = row["CompCity"]?.ToString(),
+                        DOB = row["DOB"] != DBNull.Value ? Convert.ToDateTime(row["DOB"]) : (DateTime?)null,
+                        IsEdit = ColumnExists(result, "IsEdit") && row["IsEdit"] != DBNull.Value
+                            ? Convert.ToBoolean(row["IsEdit"])
+                            : (bool?)null,
+                        CategoryName = row["CategoryName"]?.ToString()
+
+                    };
 
                     response.Status = "Success";
-                    response.Message = "Member Fetch Successfully";
-                    response.Data = memberEditList;
+                    response.Message = "Member fetched successfully";
+                    response.Data = member; 
                 }
                 else
                 {
                     response.Status = "Failed";
-                    response.Message = "Memeber Not Found,Something went wrong..";
+                    response.Message = "Member not found or something went wrong.";
                     response.Data = null;
                 }
-
-           }
+            }
             catch (Exception ex)
             {
-                var message = ex.Message.ToString();
-                response.Message = message;
-                response.Data = null;
                 response.Status = "Failed";
+                response.Message = ex.Message;
+                response.Data = null;
             }
+
             return response;
+        }
+        private bool ColumnExists(DataTable table, string columnName)
+        {
+            return table.Columns.Contains(columnName);
         }
         public async Task<ResponseEntity> GetEditedMemberChanges(long MemberId)
         {

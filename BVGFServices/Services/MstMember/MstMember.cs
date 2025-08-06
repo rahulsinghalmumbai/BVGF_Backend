@@ -1,8 +1,10 @@
-﻿using BVGFEntities.DTOs;
+﻿using Azure;
+using BVGFEntities.DTOs;
 using BVGFEntities.Entities;
 using BVGFRepository.Interfaces.MstCategary;
 using BVGFServices.Interfaces.MstMember;
 using Microsoft.Data.SqlClient;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -218,6 +220,61 @@ namespace BVGFServices.Services.MstMember
             return respons;
         }
 
+        public async Task<ResponseEntity> GetMemberByIdAsync(long MemberId)
+        {
+            ResponseEntity response = new ResponseEntity();
+            try
+            {
+                var parameters = new SqlParameter[]
+               {
+                  new SqlParameter("@MemberID", MemberId)
+               };
+                var result = await _repositery.ExecuteStoredProcedureAsync("Stp_GetMemberById", parameters);
+                if(result.Rows.Count>0)
+                {
+                    var row = result.Rows[0];
+                    var member = new MstMemberDto
+                    {
+                        MemberID = row["MemberID"] != DBNull.Value ? Convert.ToInt32(row["MemberID"]) : 0,
+                        Name = row["Name"]?.ToString(),
+                        Address = row["Address"]?.ToString(),
+                        City = row["City"]?.ToString(),
+                        Mobile1 = row["Mobile1"]?.ToString(),
+                        Mobile2 = row["Mobile2"]?.ToString(),
+                        Mobile3 = row["Mobile3"]?.ToString(),
+                        Telephone = row["Telephone"]?.ToString(),
+                        Email1 = row["Email1"]?.ToString(),
+                        Email2 = row["Email2"]?.ToString(),
+                        Email3 = row["Email3"]?.ToString(),
+                        Company = row["Company"]?.ToString(),
+                        CompAddress = row["CompAddress"]?.ToString(),
+                        CompCity = row["CompCity"]?.ToString(),
+                        DOB = row["DOB"] != DBNull.Value ? Convert.ToDateTime(row["DOB"]) : (DateTime?)null,
+                        IsEdit =row["IsEdit"] != DBNull.Value
+                        ? Convert.ToBoolean(row["IsEdit"])
+                        : (bool?)null,
+                        CategoryName = row["CategoryName"]?.ToString()
 
+                    };
+                    response.Status = "Success";
+                    response.Message = "Member fetched successfully";
+                    response.Data = member;
+                }
+                else
+                {
+                    response.Status = "Failed";
+                    response.Message = "Member not found or something went wrong.";
+                    response.Data = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message.ToString();
+                response.Status = "Fail";
+                response.Message = message;
+                response.Data = null;
+            }
+            return response;
+        }
     }
 }

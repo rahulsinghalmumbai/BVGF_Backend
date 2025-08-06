@@ -11,6 +11,7 @@ namespace BVGFServices.Interfaces.MstMember
     public interface IMstMember
     {
         Task<ResponseEntity> GetAllAsync(FilterMemberDto filter);
+        Task<ResponseEntity> GetMemberByIdAsync(long MemberId);
 
         Task<ResponseEntity> CreateAsync(MstMemberDto member);
 
