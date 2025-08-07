@@ -105,26 +105,27 @@ namespace BVGFServices.Services.MstMember
             try
             {
                 var parameters = new SqlParameter[]
-                {
-                    new SqlParameter("@MemberID", member.MemberID),
-                    new SqlParameter("@Name", member.Name),
-                    new SqlParameter("@Address", member.Address),
-                    new SqlParameter("@City", member.City),
-                    new SqlParameter("@Mobile1", member.Mobile1),
-                    new SqlParameter("@Mobile2", member.Mobile2),
-                    new SqlParameter("@Mobile3", member.Mobile3),
-                    new SqlParameter("@Telephone", member.Telephone),
-                    new SqlParameter("@Email1", member.Email1),
-                    new SqlParameter("@Email2", member.Email2),
-                    new SqlParameter("@Email3", member.Email3),
-                    new SqlParameter("@Company", member.Company),
-                    new SqlParameter("@CompAddress", member.CompAddress),
-                    new SqlParameter("@CompCity", member.CompCity),
-                    new SqlParameter("@Status", member.Status),
-                    new SqlParameter("@CreatedBy", member.CreatedBy),
-                    new SqlParameter("@UpdatedBy", member.UpdatedBy),
-                    new SqlParameter("@DOB", member.DOB),
-                };
+                 {
+                    new SqlParameter("@MemberID", (object?)member.MemberID ?? DBNull.Value),
+                    new SqlParameter("@Name", (object?)member.Name ?? DBNull.Value),
+                    new SqlParameter("@Address", (object?)member.Address ?? DBNull.Value),
+                    new SqlParameter("@City", (object?)member.City ?? DBNull.Value),
+                    new SqlParameter("@Mobile1", (object?)member.Mobile1 ?? DBNull.Value),
+                    new SqlParameter("@Mobile2", (object?)member.Mobile2 ?? DBNull.Value),
+                    new SqlParameter("@Mobile3", (object?)member.Mobile3 ?? DBNull.Value),
+                    new SqlParameter("@Telephone", (object?)member.Telephone ?? DBNull.Value),
+                    new SqlParameter("@Email1", (object?)member.Email1 ?? DBNull.Value),
+                    new SqlParameter("@Email2", (object?)member.Email2 ?? DBNull.Value),
+                    new SqlParameter("@Email3", (object?)member.Email3 ?? DBNull.Value),
+                    new SqlParameter("@Company", (object?)member.Company ?? DBNull.Value),
+                    new SqlParameter("@CompAddress", (object?)member.CompAddress ?? DBNull.Value),
+                    new SqlParameter("@CompCity", (object?)member.CompCity ?? DBNull.Value),
+                    new SqlParameter("@Status", (object?)member.Status ?? DBNull.Value),
+                    new SqlParameter("@CreatedBy", (object?)member.CreatedBy ?? DBNull.Value),
+                    new SqlParameter("@UpdatedBy", (object?)member.UpdatedBy ?? DBNull.Value),
+                    new SqlParameter("@DOB", (object?)member.DOB ?? DBNull.Value),
+                 };
+
 
                 int result = await _repositery.ExecuteNonQueryStoredProcedureAsync("stp_InsertMember", parameters);
 

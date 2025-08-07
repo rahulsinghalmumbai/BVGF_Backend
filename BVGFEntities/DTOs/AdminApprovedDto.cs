@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace BVGFEntities.DTOs
 {
-    public class EditedMemberChangeDto
+    public class AdminApprovedDto
     {
-        public long? MemberId { get; set; }
+        public long? MemberID { get; set; }
+        public long? UpdatedBy { get; set; }
         public string? ColumnName { get; set; }
-        public string? OldValue { get; set; }
         public string? NewValue { get; set; }
+        public string? Flag { get; set; }
     }
 }

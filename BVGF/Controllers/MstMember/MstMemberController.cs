@@ -46,7 +46,7 @@ namespace BVGF.Controllers.MstMember
         }
             
         [HttpPost("UpsertMember")]
-        public async Task<IActionResult> CreateMember(MstMemberDto member)
+        public async Task<IActionResult> CreateMember([FromBody] MstMemberDto member)
         {
             try
             {

@@ -159,6 +159,7 @@ namespace BVGFServices.Services.MstMember_Edit
                     {
                         memberEditList.Add(new EditedMemberChangeDto
                         {
+                            MemberId =Convert.ToInt64(row["MemberId"]),
                             ColumnName = row["ColumnName"].ToString(),
                             NewValue = row["NewValue"].ToString(),
                             OldValue = row["OldValue"].ToString()
@@ -233,13 +234,18 @@ namespace BVGFServices.Services.MstMember_Edit
             return response;
         }
 
-        public async Task<ResponseEntity> ApprovedByAdminOfMemberRecords(long MeemberId, long UpdatedBy)
+        public async Task<ResponseEntity> ApprovedByAdminOfMemberRecords(AdminApprovedDto adminApproved)
         {
             ResponseEntity response = new ResponseEntity();
             try
             {
                 var parameters = new SqlParameter[]
-                { new SqlParameter("@MemberID",MeemberId),new SqlParameter("@UpdatedBy",UpdatedBy)};
+                { new SqlParameter("@MemberID",adminApproved.MemberID),
+                  new SqlParameter("@UpdatedBy",adminApproved.UpdatedBy),
+                  new SqlParameter("@ColumnName",adminApproved.ColumnName),
+                  new SqlParameter("@NewValue",adminApproved.NewValue),
+                  new SqlParameter("@Flag",adminApproved.Flag)
+                };
                 var result = await _repository.ExecuteNonQueryStoredProcedureAsync("stp_UpdateMemberFromEditAndDeleteEditRow", parameters);
                 if(result!=null && result>0)
                 {
@@ -259,6 +265,51 @@ namespace BVGFServices.Services.MstMember_Edit
                     response.Message = "Something Went Wrong..";
                     response.Data = null;
                 }
+            }
+            catch (Exception ex)
+            {
+                response.Status = "Failed";
+                response.Message = ex.Message;
+                response.Data = null;
+            }
+
+            return response;
+        }
+
+        public async Task<ResponseEntity> AdminUserLogin(AdminuserDto member)
+        {
+            ResponseEntity response = new ResponseEntity();
+            try
+            {
+                var parameters = new SqlParameter[]
+                { new SqlParameter("@UserName",member.UserName),new SqlParameter("@pwd",member.pwd)};
+                var result = await _repository.ExecuteStoredProcedureAsync("Stp_AdminLogin", parameters);
+                
+                if(result!=null && result.Rows.Count>0)
+                {
+                    DataRow row = result.Rows[0];
+                    Adminuser adminuser = new Adminuser
+                    {
+                        Id = Convert.ToInt64(row["Id"]),
+                        UserName = row["UserName"].ToString()
+                        //pwd = row["pwd"].ToString()
+                    };
+                    response.Status = "Success";
+                    response.Message = "Login Successfully..";
+                    response.Data = adminuser;
+                }
+                else if(result.Rows.Count==0)
+                {
+                    response.Status = "Failed";
+                    response.Message = "Credentials do not match.";
+                    response.Data = null;
+                }else
+                {
+                    response.Status = "Failed";
+                    response.Message = "Something Went wrong.";
+                    response.Data = null;
+                }
+    
             }
             catch (Exception ex)
             {
