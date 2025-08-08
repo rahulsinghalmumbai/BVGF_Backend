@@ -133,7 +133,7 @@ public async Task<ResponseEntity> CreateAsync(MstMemberDto member)
 
                 int result = await _repositery.ExecuteNonQueryStoredProcedureAsync("stp_InsertMember", parameters);
 
-                if (result > 0)
+                if (result !=null)
                 {
                     response.Status = "Success";
                     response.Message = member.MemberID > 0 ? "Member updated successfully." : "Member created successfully.";
