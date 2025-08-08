@@ -247,17 +247,17 @@ namespace BVGFServices.Services.MstMember_Edit
                   new SqlParameter("@Flag",adminApproved.Flag)
                 };
                 var result = await _repository.ExecuteNonQueryStoredProcedureAsync("stp_UpdateMemberFromEditAndDeleteEditRow", parameters);
-                if(result!=null && result>0)
+                if(result!=null && adminApproved.Flag== "Approved")
                 {
                     response.Status = "Success";
                     response.Message = "Member Approved Successfully..";
                     response.Data = result;
                 }
-                else if(result== -1)
+                else if(result != null && adminApproved.Flag == "Rejected")
                 {
                     response.Status = "Success";
-                    response.Message = "Member is not found for Approval";
-                    response.Data = null;
+                    response.Message = "Member Rejected Successfully..";
+                    response.Data = result;
                 }
                 else
                 {

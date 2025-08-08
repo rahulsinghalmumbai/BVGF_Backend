@@ -120,7 +120,7 @@ namespace BVGFServices.Services.MstMember
                     new SqlParameter("@Company", (object?)member.Company ?? DBNull.Value),
                     new SqlParameter("@CompAddress", (object?)member.CompAddress ?? DBNull.Value),
                     new SqlParameter("@CompCity", (object?)member.CompCity ?? DBNull.Value),
-                    new SqlParameter("@Status", (object?)member.Status ?? DBNull.Value),
+                   // new SqlParameter("@Status", (object?)member.Status ?? DBNull.Value),
                     new SqlParameter("@CreatedBy", (object?)member.CreatedBy ?? DBNull.Value),
                     new SqlParameter("@UpdatedBy", (object?)member.UpdatedBy ?? DBNull.Value),
                     new SqlParameter("@DOB", (object?)member.DOB ?? DBNull.Value),
