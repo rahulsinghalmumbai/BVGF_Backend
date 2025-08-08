@@ -11,6 +11,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+
 
 namespace BVGFServices.Services.MstMember
 {
@@ -98,34 +100,36 @@ namespace BVGFServices.Services.MstMember
             return respons;
         }
     
-        public async Task<ResponseEntity> CreateAsync(MstMemberDto member)
-        {
-            ResponseEntity response = new ResponseEntity();
+   
 
-            try
+public async Task<ResponseEntity> CreateAsync(MstMemberDto member)
+    {
+        ResponseEntity response = new ResponseEntity();
+
+        try
+        {
+            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 var parameters = new SqlParameter[]
-                 {
-                    new SqlParameter("@MemberID", (object?)member.MemberID ?? DBNull.Value),
-                    new SqlParameter("@Name", (object?)member.Name ?? DBNull.Value),
-                    new SqlParameter("@Address", (object?)member.Address ?? DBNull.Value),
-                    new SqlParameter("@City", (object?)member.City ?? DBNull.Value),
-                    new SqlParameter("@Mobile1", (object?)member.Mobile1 ?? DBNull.Value),
-                    new SqlParameter("@Mobile2", (object?)member.Mobile2 ?? DBNull.Value),
-                    new SqlParameter("@Mobile3", (object?)member.Mobile3 ?? DBNull.Value),
-                    new SqlParameter("@Telephone", (object?)member.Telephone ?? DBNull.Value),
-                    new SqlParameter("@Email1", (object?)member.Email1 ?? DBNull.Value),
-                    new SqlParameter("@Email2", (object?)member.Email2 ?? DBNull.Value),
-                    new SqlParameter("@Email3", (object?)member.Email3 ?? DBNull.Value),
-                    new SqlParameter("@Company", (object?)member.Company ?? DBNull.Value),
-                    new SqlParameter("@CompAddress", (object?)member.CompAddress ?? DBNull.Value),
-                    new SqlParameter("@CompCity", (object?)member.CompCity ?? DBNull.Value),
-                   // new SqlParameter("@Status", (object?)member.Status ?? DBNull.Value),
-                    new SqlParameter("@CreatedBy", (object?)member.CreatedBy ?? DBNull.Value),
-                    new SqlParameter("@UpdatedBy", (object?)member.UpdatedBy ?? DBNull.Value),
-                    new SqlParameter("@DOB", (object?)member.DOB ?? DBNull.Value),
-                 };
-
+                {
+                new SqlParameter("@MemberID", (object?)member.MemberID ?? 0),
+                new SqlParameter("@Name", (object?)member.Name ?? DBNull.Value),
+                new SqlParameter("@Address", (object?)member.Address ?? DBNull.Value),
+                new SqlParameter("@City", (object?)member.City ?? DBNull.Value),
+                new SqlParameter("@Mobile1", (object?)member.Mobile1 ?? DBNull.Value),
+                new SqlParameter("@Mobile2", (object?)member.Mobile2 ?? DBNull.Value),
+                new SqlParameter("@Mobile3", (object?)member.Mobile3 ?? DBNull.Value),
+                new SqlParameter("@Telephone", (object?)member.Telephone ?? DBNull.Value),
+                new SqlParameter("@Email1", (object?)member.Email1 ?? DBNull.Value),
+                new SqlParameter("@Email2", (object?)member.Email2 ?? DBNull.Value),
+                new SqlParameter("@Email3", (object?)member.Email3 ?? DBNull.Value),
+                new SqlParameter("@Company", (object?)member.Company ?? DBNull.Value),
+                new SqlParameter("@CompAddress", (object?)member.CompAddress ?? DBNull.Value),
+                new SqlParameter("@CompCity", (object?)member.CompCity ?? DBNull.Value),
+                new SqlParameter("@CreatedBy", (object?)member.CreatedBy ?? DBNull.Value),
+                new SqlParameter("@UpdatedBy", (object?)member.UpdatedBy ?? DBNull.Value),
+                new SqlParameter("@DOB", (object?)member.DOB ?? DBNull.Value),
+                };
 
                 int result = await _repositery.ExecuteNonQueryStoredProcedureAsync("stp_InsertMember", parameters);
 
@@ -134,33 +138,45 @@ namespace BVGFServices.Services.MstMember
                     response.Status = "Success";
                     response.Message = member.MemberID > 0 ? "Member updated successfully." : "Member created successfully.";
                     response.Data = member;
+
+                    scope.Complete(); // Commit only if everything is OK
                 }
                 else
                 {
-                    response.Status = "Failed";
-                    response.Message = "Something went wrong while saving member data.";
-                    response.Data = null;
+                        response.Status = "Failed";
+                        response.Message = member.MemberID > 0 ? "Member Updated Failed." : "Member Created Failed.";
+                        response.Data = null;
+
                 }
             }
-            catch (SqlException sqlEx)
+        }
+        catch (SqlException sqlEx)
+        {
+            if (sqlEx.Message.Contains("UQ_MstMember_Mobile1"))
             {
-               
+                response.Status = "Error";
+                response.Message = "Mobile1 number already exists.";
+                response.Data = null;
+            }
+            else
+            {
                 response.Status = "Error";
                 response.Message = "Database error occurred.";
-                response.Data = sqlEx.Message; 
+                response.Data = sqlEx.Message;
             }
-            catch (Exception ex)
-            {
-               
-                response.Status = "Error";
-                response.Message = "An unexpected error occurred.";
-                response.Data = ex.Message; 
-            }
-
-            return response;
+        }
+        catch (Exception ex)
+        {
+            response.Status = "Error";
+            response.Message = "An unexpected error occurred.";
+            response.Data = ex.Message;
         }
 
-        public async Task<ResponseEntity> LoginByMob(string mob)
+        return response;
+    }
+
+
+    public async Task<ResponseEntity> LoginByMob(string mob)
         {
             ResponseEntity respons = new ResponseEntity();
             try
