@@ -10,7 +10,9 @@
         public string Mobile1 { get; set; }
         public string? Mobile2 { get; set; }
         public string? Mobile3 { get; set; }
+
         public string? Telephone { get; set; }
+
         public string Email1 { get; set; }
         public string? Email2 { get; set; }
         public string? Email3 { get; set; }
@@ -19,6 +21,5 @@
         public string? CompAddress { get; set; }
         public string? CompCity { get; set; }
         public DateTime? DOB { get; set; }
-        public bool? IsEdit { get; set; } = false;   
     }
 }

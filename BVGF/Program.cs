@@ -1,14 +1,10 @@
 using BVGF.Mapper;
 using BVGFRepository.Interfaces.MstCategary;
 using BVGFRepository.Repository.MstCategary;
-using BVGFServices.Interfaces.CategoryMember;
 using BVGFServices.Interfaces.MstCategary;
 using BVGFServices.Interfaces.MstMember;
-using BVGFServices.Interfaces.MstMember_Edit;
-using BVGFServices.Services.CategoryMember;
 using BVGFServices.Services.MstCategary;
 using BVGFServices.Services.MstMember;
-using BVGFServices.Services.MstMember_Edit;
 
 namespace BVGF
 {
@@ -31,20 +27,8 @@ namespace BVGF
             builder.Services.AddScoped<IMstCategary, MstCategary>();
 
             builder.Services.AddScoped<IMstMember, MstMember>();
-
-            builder.Services.AddScoped<ICategoryMember, CategoryMember>();
-
-            builder.Services.AddScoped<IMstMember_Edit, MstMember_Edit>();
             //register our automapper
             builder.Services.AddAutoMapper(typeof(Automapperr));
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                    builder => builder.AllowAnyOrigin()
-                                      .AllowAnyMethod()
-                                      .AllowAnyHeader());
-            });
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -53,13 +37,10 @@ namespace BVGF
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.UseSwagger();
-            app.UseSwaggerUI();
+
             app.UseHttpsRedirection();
 
-            app.UseAuthorization(); 
-            app.UseCors("AllowAll");
-
+            app.UseAuthorization();
 
 
             app.MapControllers();

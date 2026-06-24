@@ -23,9 +23,21 @@ namespace BVGF.Controllers.MstCategary
             try
             {
                 var categories = await _mstCategaryService.GetAllAsync();
-                
-                return Ok(categories);
-                
+
+                if (categories == null || categories.Count == 0)
+                    return NotFound(new ResponseEntity
+                    {
+                        Status = "404",
+                        Message = "No categories found",
+                        Data = null
+                    });
+
+                return Ok(new ResponseEntity
+                {
+                    Status = "200",
+                    Message = "Categaries Founds",
+                    Data = categories
+                });
             }
             catch (Exception ex)
             {
@@ -38,8 +50,19 @@ namespace BVGF.Controllers.MstCategary
         {
             try
             {
+                if (dto == null || string.IsNullOrWhiteSpace(dto.CategoryName))
+                    return BadRequest(new ResponseEntity { Status = "400", Message = "Bad Request", Data = null });
+
                 var result = await _mstCategaryService.CreateAsync(dto);
-                return Ok(result);
+
+                if (dto.CategoryID == 0 || dto.CategoryID == null)
+                {
+                    return Ok(new ResponseEntity { Status = "200", Message = "Category created successfully", Data = result });
+                }
+                else
+                {
+                    return Ok(new ResponseEntity { Status = "200", Message = "Category Updated successfully", Data = result });
+                }
             }
             catch (Exception ex)
             {
@@ -54,8 +77,23 @@ namespace BVGF.Controllers.MstCategary
             try
             {
                 var category = await _mstCategaryService.GetByID(CategoryID);
-                return Ok(category);
-               
+
+                if (category == null)
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "No category found",
+                        Data = category
+                    });
+                }
+
+                return Ok(new ResponseEntity
+                {
+                    Status = "200",
+                    Message = "Category found",
+                    Data = category
+                });
             }
             catch (Exception ex)
             {
@@ -69,14 +107,31 @@ namespace BVGF.Controllers.MstCategary
         }
 
 
-        [HttpPost("CategoryID")]
-        public async Task<IActionResult> DeleteCategoryByID([FromBody] CategoryDeleteDto dto)
+        [HttpDelete("CategoryID")]
+        public async Task<ActionResult> DeleteCategoryByID(long CategoryID)
         {
             try
             {
-                var category = await _mstCategaryService.DeleteByID(dto);
+                var category = await _mstCategaryService.DeleteByID(CategoryID);
 
-                return Ok(category);
+               if(category>0)
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "category Delete",
+                        Data = category
+                    });
+                }
+                else
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "Category not found or already deleted",
+                        Data = category
+                    });
+                }
                
             }
             catch (Exception ex)
@@ -87,7 +142,6 @@ namespace BVGF.Controllers.MstCategary
 
         }
 
-
         [HttpGet("DropDown")]
         public async Task<ActionResult> GetDropDown()
         {
@@ -95,9 +149,26 @@ namespace BVGF.Controllers.MstCategary
             {
                 var data = await _mstCategaryService.GetDropdownAsync();
 
-                return Ok(data);
+                if(data==null || data.Count == 0)
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "NO DropDown Data",
+                        Data = null
+                    });
+                }
+                else
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "Dropdown Data",
+                        Data = data
+                    });
+                }
             }
-            catch (Exception ex)
+            catch(Exception ex) 
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error:{ex.Message}");
             }

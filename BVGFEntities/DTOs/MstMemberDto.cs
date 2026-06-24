@@ -28,15 +28,5 @@ namespace BVGFEntities.DTOs
         public string? CompCity { get; set; }
 
         public DateTime? DOB { get; set; }
-        public bool? IsEdit { get; set; }=false;
-        public string? CategoryName { get; set; }
-    }
-    public class FilterMemberDto
-    {
-        public string? Name { get; set; }
-        public string? Mobile1 { get; set; }
-        public string? City { get; set; }
-        public string? Company { get; set; }
-        public long? CatName { get; set; }
     }
 }

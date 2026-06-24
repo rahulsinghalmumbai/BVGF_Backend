@@ -9,7 +9,6 @@ namespace BVGF.Mapper
         public Automapperr()
         {
             CreateMap<MstCategoryDto, MstCategory>().ReverseMap();
-            CreateMap<FilterMemberDto, MstMemberDto>().ReverseMap();
         }
     }
 }

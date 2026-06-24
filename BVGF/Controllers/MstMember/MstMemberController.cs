@@ -22,8 +22,22 @@ namespace BVGF.Controllers.MstMember
         {
             try
             {
-                var Members = await _mstMemberService.GetAllAsync(filter);
-               return Ok(Members);
+                var Members = await _mstMemberService.GetAllAsync();
+                if (Members == null || Members.Count == 0)
+                {
+                    return NotFound(new ResponseEntity
+                    {
+                        Status = "400",
+                        Message = "Record Not Found",
+                        Data = Members
+                    });
+                }
+                return Ok(new ResponseEntity
+                {
+                    Status = "200",
+                    Message = "All Member Found",
+                    Data = Members
+                });
             }
             catch (Exception ex)
             {
@@ -52,16 +66,29 @@ namespace BVGF.Controllers.MstMember
             {
                 if (member == null || String.IsNullOrWhiteSpace(member.Name))
                 {
-                    return BadRequest(member);
+                    return BadRequest(new ResponseEntity { Status = "400", Message = "Bad Request", Data = null });
                 }
 
                 var data = await _mstMemberService.CreateAsync(member);
-                if (data.Status == "Failed" || data.Status == "Error")
-                {
-                    return BadRequest(data);
-                }
 
-                return Ok(data);
+                if (member.MemberID == 0 || member.MemberID==null) 
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "Create Member Successfully",
+                        Data = data
+                    });
+                }
+                else
+                {
+                    return Ok(new ResponseEntity
+                    {
+                        Status = "200",
+                        Message = "Update Member Successfully",
+                        Data = data
+                    });
+                }
 
             }
             catch (Exception ex)
@@ -70,18 +97,28 @@ namespace BVGF.Controllers.MstMember
             }
         }
 
-        [HttpGet("login")]
-        public async Task<ActionResult> LoginMember([FromQuery] string MobileNo)
+        [HttpPost("Login")]
+        public async  Task<ActionResult> LoginMember(string MobileNo)
         {
-            try
+            string result = await _mstMemberService.LoginByMob(MobileNo);
+            if (result == null) 
             {
-                var result = await _mstMemberService.LoginByMob(MobileNo);
-                return Ok(result);
+                return Ok(new ResponseEntity
+                {
+                    Message = "Invalid",
+                    Status = "200",
+                    Data = MobileNo
+                });
             }
-            catch (Exception ex)
+            else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+                return Ok(new ResponseEntity
+                {
+                    Message = "Login Successfully",
+                    Status = "200",
+                    Data = MobileNo
+                });
             }
         }
-    }
+    } 
 }
