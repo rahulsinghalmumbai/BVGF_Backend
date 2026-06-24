@@ -8,6 +8,7 @@ namespace BVGFEntities.DTOs
 {
     public class EditedMemberChangeDto
     {
+        public long? MemberId { get; set; }
         public string? ColumnName { get; set; }
         public string? OldValue { get; set; }
         public string? NewValue { get; set; }

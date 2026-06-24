@@ -14,6 +14,7 @@ namespace BVGFServices.Interfaces.MstMember_Edit
         Task<ResponseEntity> GetMember_EditByMemId(long MemberId);
         Task<ResponseEntity> GetEditedMemberChanges(long MemberId);
         Task<ResponseEntity> GetAllEditedMembers();
-        Task<ResponseEntity> ApprovedByAdminOfMemberRecords(long MeemberId, long UpdatedBy);
+        Task<ResponseEntity> ApprovedByAdminOfMemberRecords(AdminApprovedDto adminApproved);
+        Task<ResponseEntity> AdminUserLogin(AdminuserDto member);
     }
 }

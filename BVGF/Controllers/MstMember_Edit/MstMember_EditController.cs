@@ -69,12 +69,12 @@ namespace BVGF.Controllers.MstMember_Edit
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
             }
         }
-        [HttpGet("ApprovedByAdminOfMemberRecords")]
-        public async Task<IActionResult> ApprovedByAdminOfMemberRecords(long MeemberId, long UpdatedBy)
+        [HttpPost("ApprovedByAdminOfMemberRecords")]
+        public async Task<IActionResult> ApprovedByAdminOfMemberRecords(AdminApprovedDto adminApproved)
         {
             try
             {
-                var response = await _mstMember_EditServicse.ApprovedByAdminOfMemberRecords(MeemberId, UpdatedBy);
+                var response = await _mstMember_EditServicse.ApprovedByAdminOfMemberRecords(adminApproved);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -82,5 +82,19 @@ namespace BVGF.Controllers.MstMember_Edit
                 return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
             }
         }
+        [HttpPost("AdminLogin")]
+        public async Task<IActionResult> AdminUserLogin(AdminuserDto adminuser)
+        {
+            try
+            {
+                var result=await _mstMember_EditServicse.AdminUserLogin(adminuser);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Internal Server Error: {ex.Message}");
+            }
+        }
+
     }
 }
